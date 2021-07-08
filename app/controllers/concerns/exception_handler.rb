@@ -1,0 +1,20 @@
+module ExceptionHandler
+
+    extend ActiveSupport::Concern
+
+    included do
+        rescue_from ActiveRecord::RecordNotFound do |e|
+            json_response({error: e.message}, :not_found)
+        end
+
+        rescue_from ActiveRecord::RecordInvalid do |e|
+            json_response({error: e.message}, :unproccessable_entity)
+        end
+
+        rescue_from ActiveRecord::RecordNotDestroyed do |e|
+            json_response({ error: e.record.errors }, :unproccessable_entity)
+        end
+
+    end
+    
+end
